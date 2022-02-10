@@ -13,11 +13,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.himanshoe.kalendar.common.KalendarSelector
 import com.himanshoe.kalendar.common.KalendarStyle
-import com.himanshoe.kalendar.common.data.KalendarEvent
 import com.himanshoe.kalendar.ui.Kalendar
 import com.himanshoe.kalendar.ui.KalendarType
+import com.rujirakongsomran.jc_m3calendar.repository.CalendarEventsRepository
 import com.rujirakongsomran.jc_m3calendar.ui.theme.JC_M3CalendarTheme
-import java.time.LocalDate
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,28 +37,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun CreateCalendar() {
     val context = LocalContext.current
+    val calendarEventsRepository = CalendarEventsRepository()
+    val getAllEvent = calendarEventsRepository.getAllEvent()
     Kalendar(
         kalendarType = KalendarType.Firey(),
         kalendarStyle = KalendarStyle(
             kalendarSelector = KalendarSelector.Circle()
         ),
-        kalendarEvents = listOf(
-            KalendarEvent(
-                date = LocalDate.of(2022, 2, 28),
-                eventName = "Laura's Birthday \uD83C\uDF82",
-                eventDescription = "join the party"
-            ),
-            KalendarEvent(
-                date = LocalDate.of(2022, 2, 14),
-                eventName = "Go on a date \uD83D\uDC96",
-                eventDescription = "with Hardin"
-            ),
-            KalendarEvent(
-                date = LocalDate.of(2022, 3, 2),
-                eventName = "Get Vaccinated \uD83D\uDC89",
-                eventDescription = "09:00 - 10:00 Auth Hospital"
-            ),
-        ),
+        kalendarEvents = getAllEvent,
         onCurrentDayClick = { day, event ->
             if (event != null) {
                 Toast.makeText(
